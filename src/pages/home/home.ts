@@ -31,9 +31,6 @@ export class HomePage {
 
     ionViewWillEnter() {
 
-        // this.records = this.recordProvider.loadDummyTimes()
-        // this.showCorrectButton(this.records)
-
         this.recordProvider.loadTodayTimes().then((records) => {
             console.log('loaded -> ' + records)
             return this.records = records
@@ -90,6 +87,7 @@ export class HomePage {
 
     pica(type: RecordType, time: Moment) {
         this.recordProvider.addTime(time, type)
+        this.records.push(new Record(type, time))
     }
 
     now() {

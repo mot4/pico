@@ -73,21 +73,26 @@ export class RecordProvider {
     return this.loadTimes().then((val: any) => {
       var items = []
       if (val != undefined && val != null) {
-        var parsedVal = JSON.parse(val)
         switch (loadType) {
           case LoadType.YEAR:
-            parsedVal.forEach(record => {
-              if (this.sameYear(record.time, this.selectedTime)) items.push(record)
+            val.forEach(record => {
+              if (this.sameYear(record.time, this.selectedTime)) {
+                items.push(record)
+              }
             });
             break;
           case LoadType.MONTH:
-            parsedVal.forEach(record => {
-              if (this.sameMonth(record.time, this.selectedTime)) items.push(record)
+            val.forEach(record => {
+              if (this.sameMonth(record.time, this.selectedTime)) {
+                items.push(record)
+              }
             });
             break;
           case LoadType.DAY:
-            parsedVal.forEach(record => {
-              if (this.sameDay(record.time, this.selectedTime)) items.push(record)
+            val.forEach(record => {
+              if (this.sameDay(record.time, this.selectedTime)) {
+                items.push(record)
+              }
             });
             break;
           default:
@@ -113,10 +118,12 @@ export class RecordProvider {
   }
 
   loadTodayTimes(): Promise<Array<Record>> {
+    // this.saveRecords(this.loadDummyTimes())
+
     return this.loadTimes().then((val: any) => {
       var items = []
       if (val != undefined && val != null) {
-        JSON.parse(val).forEach(record => {
+        val.forEach(record => {
           if (this.isToday(record.time)) items.push(record)
         });
       }
@@ -134,8 +141,20 @@ export class RecordProvider {
   }
 
   loadTimes(): Promise<any> {
-    return this.storage.get(this.storageKey).then((times) => {
-      this.records = JSON.parse(times)
+    return new Promise((resolve, reject) => {
+
+      // to load dummy data
+      // resolve(this.loadDummyTimes())
+
+      this.storage.get(this.storageKey).then((times) => {
+        if (times != null) {
+          this.records = JSON.parse(times)
+        }
+        resolve(this.records)
+      }).catch((c) => {
+        reject(c)
+      })
+
     })
   }
 
@@ -153,7 +172,7 @@ export class RecordProvider {
   hasRecords(): Promise<boolean> {
     return this.loadTimes().then((times) => {
       console.log('hasRecords')
-      if (times != undefined && times != null && JSON.parse(times).lenght != 0) {
+      if (times != undefined && times != null && times.lenght != 0) {
         return true
       }
       return false
@@ -184,7 +203,7 @@ export class RecordProvider {
   }
 
   sameMonth(time: Moment, time2: Moment): boolean {
-    return moment(time).month() == moment(time2).month() && moment(time).year() == moment(time2).year()
+    return moment(time).isSame(time2, "month")
   }
 
   sameYear(time: Moment, time2: Moment): boolean {

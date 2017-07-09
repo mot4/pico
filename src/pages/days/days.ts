@@ -27,7 +27,13 @@ export class DaysPage {
   ionViewWillEnter() {
     console.log('ionViewWillEnter days')
     this.recordProvider.loadRecordsForSelectedMonth().then((v) => {
-      this.records = v
+      return this.records = v
+    }).then((records) => {
+      if (records == undefined || records.length == 0) {
+        this.title = moment()
+      } else {
+        this.title = records[0].time
+      }
     })
     // if (this.navParams.get('records') == undefined || this.navParams.get('records') == null) {
     //   this.records = new Array<Record>()
@@ -39,11 +45,6 @@ export class DaysPage {
     //     });
     //   })
     // }
-    if (this.records == undefined || this.records.length == 0) {
-      this.title = moment()
-    } else {
-      this.title = this.records[0].time
-    }
   }
 
   goToRecordPage(clickedTime: Moment) {

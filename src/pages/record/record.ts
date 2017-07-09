@@ -31,19 +31,19 @@ export class RecordPage {
 
   ionViewWillEnter() {
     this.recordProvider.loadRecordsForSelectedDay().then((v) => {
-      this.records = v;
+      return this.records = v;
+    }).then((records) => {
+      this.setTitle(records)
     })
     // this.loadRecords()
 
-    this.setTitle()
-
   }
 
-  setTitle() {
-    if (!this.records || this.records.length == 0) {
+  setTitle(records) {
+    if (!records || records.length == 0) {
       this.title = moment().format(this.titleFormat)
     } else {
-      this.title = moment(this.records[0].time).format(this.titleFormat)
+      this.title = moment(records[0].time).format(this.titleFormat)
     }
   }
 
@@ -54,6 +54,11 @@ export class RecordPage {
         this.records = v
       })
     }
+  }
+
+  deleteRecord(record) {
+    this.records.splice(this.records.indexOf(record), 1)
+    this.recordProvider.deleteRecord(record)
   }
 
   dateChanged(record: Record, date) {

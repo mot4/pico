@@ -26,8 +26,7 @@ export class YearsPage {
   ionViewWillEnter() {
     console.log('ionViewWillEnter years')
     this.recordProvider.loadTimes().then((v) => {
-      this.records = JSON.parse(v)
-      console.log(this.records.length)
+      this.records = v
     })
     // this.records = this.data.loadDummyTimes()
   }
@@ -36,7 +35,7 @@ export class YearsPage {
     console.log('ionViewDidLoad years')
     this.recordProvider.hasRecords().then((has) => {
 
-      console.log('check hasRecords')
+      console.log('check hasRecords -> ' + has)
       if (has) {
         this.navCtrl.insertPages(1, [{ page: "MonthsPage" }, { page: "DaysPage" }, { page: "RecordPage" }])
       }
