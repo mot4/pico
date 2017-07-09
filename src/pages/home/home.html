@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Pico!</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding text-center>
+  <div padding-top *ngIf="showEntrada">
+    <button ion-button round large icon-left (click)="picarEntrada()">
+        <ion-icon name="log-in"></ion-icon>
+        Entrada
+    </button>
+  </div>
+  <div padding-top *ngIf="showSalida">
+    <button ion-button round large icon-left (click)="picarSalida()">
+      <ion-icon name="log-out"></ion-icon>
+      Salida
+    </button>
+  </div>
+
+  <ion-icon *ngIf="showSuccess" name="checkmark-circle" class="record-check" padding-top></ion-icon>
+
+  <ion-list class="block-top">
+    <h1>Today</h1>
+    <ion-item *ngFor="let record of records">
+      <ion-icon name="{{getNameForType(record.type)}}" item-left></ion-icon>
+      {{record.time | date:'H:mm:ss'}}
+    </ion-item>
+  </ion-list>
+</ion-content>

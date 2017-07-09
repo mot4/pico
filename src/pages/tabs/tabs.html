@@ -1,0 +1,5 @@
+<ion-tabs>
+  <ion-tab [root]="tab1Root" tabIcon="clock"></ion-tab>
+  <ion-tab #myNav [root]="tab2Root" (ionSelect)="getTab2Root()" tabIcon="list"></ion-tab>
+  <!--<ion-tab [root]="tab3Root" tabIcon="settings"></ion-tab>-->
+</ion-tabs>
