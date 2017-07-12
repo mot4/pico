@@ -13,17 +13,17 @@ export class UniquePipe implements PipeTransform {
         if (records !== undefined && records !== null) {
             switch (param) {
                 case 'year':
-                    return _.uniqWith(records, function (val: Record, other: Record) {
-                        return moment(val.time).year() == moment(other.time).year()
+                    return _.uniqWith(records, (val: Record, other: Record) => {
+                        return val.time.isSame(other.time, 'year')
                     })
 
                 case 'month':
-                    return _.uniqWith(records, function (val: Record, other: Record) {
-                        return moment(val.time).month() == moment(other.time).month()
+                    return _.uniqWith(records, (val: Record, other: Record) => {
+                        return val.time.isSame(other.time, 'month')
                     })
                 case 'day':
-                    return _.uniqWith(records, function (val: Record, other: Record) {
-                        return moment(val.time).day() == moment(other.time).day()
+                    return _.uniqWith(records, (val: Record, other: Record) => {
+                        return val.time.isSame(other.time, 'day')
                     })
                 default:
                     break;

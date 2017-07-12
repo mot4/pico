@@ -24,6 +24,7 @@ export class HomePage {
     constructor(public navCtrl: NavController, public recordProvider: RecordProvider) {
         this.showEntrada = true
         // recordProvider.reset()
+        console.log(moment().utc().valueOf())
     }
 
     ionViewDidLoad() {
@@ -54,13 +55,13 @@ export class HomePage {
     }
 
     picarEntrada() {
-        this.pica(RecordType.ENTRY, moment())
+        this.pica(RecordType.ENTRY, moment().utc())
 
         this.showEntradaMessage()
     }
 
     picarSalida() {
-        this.pica(RecordType.DEPARTURE, moment())
+        this.pica(RecordType.DEPARTURE, moment().utc())
 
         this.showSalidaMessage()
     }

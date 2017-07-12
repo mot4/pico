@@ -22,7 +22,7 @@ export class TabsPage {
   }
 
   ionViewCanEnter() {
-    this.recordProvider.setSelectedTime(moment())
+    this.recordProvider.setSelectedTime(moment().utc())
   }
 
 

@@ -4,6 +4,7 @@ import { Record } from '../../app/services/record'
 import { RecordType } from "../../app/services/record-type";
 import { RecordProvider } from "../../providers/record/record";
 import * as moment from 'moment';
+import { Moment } from "moment";
 
 /**
  * Generated class for the RecordPage page.
@@ -20,40 +21,23 @@ export class RecordPage {
 
   @ViewChild(List) slidingItems: List;
 
-  titleFormat = "D MMMM"
-  title: String
+  title: Moment
   records: Array<Record>;
   _datePickerModel: any
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public recordProvider: RecordProvider) {
-    this.records = navParams.get('records')
+  constructor(public navCtrl: NavController, public recordProvider: RecordProvider) {
   }
 
   ionViewWillEnter() {
     this.recordProvider.loadRecordsForSelectedDay().then((v) => {
       return this.records = v;
     }).then((records) => {
-      this.setTitle(records)
+      if (records == undefined || records.length == 0) {
+        this.title = moment().utc()
+      } else {
+        this.title = records[0].time
+      }
     })
-    // this.loadRecords()
-
-  }
-
-  setTitle(records) {
-    if (!records || records.length == 0) {
-      this.title = moment().format(this.titleFormat)
-    } else {
-      this.title = moment(records[0].time).format(this.titleFormat)
-    }
-  }
-
-  loadRecords() {
-    if (this.navParams.get('records') == undefined || this.navParams.get('records') == null) {
-      // no day selected, show today records
-      this.recordProvider.loadTodayTimes().then((v) => {
-        this.records = v
-      })
-    }
   }
 
   deleteRecord(record) {

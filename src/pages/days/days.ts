@@ -30,34 +30,14 @@ export class DaysPage {
       return this.records = v
     }).then((records) => {
       if (records == undefined || records.length == 0) {
-        this.title = moment()
+        this.title = moment().utc()
       } else {
         this.title = records[0].time
       }
     })
-    // if (this.navParams.get('records') == undefined || this.navParams.get('records') == null) {
-    //   this.records = new Array<Record>()
-    //   this.recordProvider.loadTimes().then((v) => {
-    //     JSON.parse(v).forEach(d => {
-    //       if (this.recordProvider.isThisMonth(d.time)) {
-    //         this.records.push(d)
-    //       }
-    //     });
-    //   })
-    // }
   }
 
   goToRecordPage(clickedTime: Moment) {
-
-    // var thisDay = Array<Record>()
-
-    // this.records.forEach(record => {
-    //   if (this.recordProvider.sameDay(record.time, clickedTime)) {
-    //     thisDay.push(record)
-    //   }
-    // });
-
-    // this.navCtrl.push('RecordPage', { records: thisDay })
     this.recordProvider.setSelectedTime(clickedTime)
     this.navCtrl.push("RecordPage")
   }

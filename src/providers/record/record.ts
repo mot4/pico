@@ -48,7 +48,7 @@ export class RecordProvider {
 
 */
   getSelectedTime(): Moment {
-    if (this.selectedTime == undefined) return moment()
+    if (this.selectedTime == undefined) return moment().utc()
 
     return this.selectedTime
   }
@@ -137,7 +137,7 @@ export class RecordProvider {
   }
 
   private saveRecords(records: Array<Record>) {
-    this.storage.set(this.storageKey, JSON.stringify(records))
+    this.storage.set(this.storageKey, this.serialize(records))
   }
 
   loadTimes(): Promise<any> {
@@ -148,13 +148,33 @@ export class RecordProvider {
 
       this.storage.get(this.storageKey).then((times) => {
         if (times != null) {
-          this.records = JSON.parse(times)
+          this.records = this.deserialize(times)
         }
         resolve(this.records)
       }).catch((c) => {
         reject(c)
       })
 
+    })
+  }
+
+
+  serialize(collection) {
+    const RE_ISO_DATE = /\d{4}-[01]\d-[0-3]\dT?[0-2]\d:[0-5]\d(?::[0-5]\d(?:.\d{1,6})?)?(?:([+-])([0-2]\d):?([0-5]\d)|Z)/
+
+    return JSON.stringify(collection, function (k, v) {
+      if (typeof v === 'string' && v.match(RE_ISO_DATE)) {
+        return 'moment:' + moment.utc(v).valueOf()
+      }
+      return v
+    })
+  }
+  deserialize(serializedData) {
+    return JSON.parse(serializedData, function (k, v) {
+      if (typeof v === 'string' && v.includes('moment:')) {
+        return moment.utc(parseInt(v.split(':')[1], 10))
+      }
+      return v
     })
   }
 
@@ -169,6 +189,7 @@ export class RecordProvider {
     this.saveRecords(this.records)
   }
 
+  // TODO: loadTimes or this.records??
   hasRecords(): Promise<boolean> {
     return this.loadTimes().then((times) => {
       console.log('hasRecords')
@@ -185,29 +206,30 @@ export class RecordProvider {
   }
 
   isToday(time: Moment): boolean {
-    return this.sameDay(time, moment())
+    return this.sameDay(time, moment().utc())
   }
 
   isThisMonth(time: Moment): boolean {
-    return this.sameMonth(time, moment())
+    return this.sameMonth(time, moment().utc())
   }
 
   isThisYear(time: Moment): boolean {
-    return this.sameYear(time, moment())
+    return this.sameYear(time, moment().utc())
   }
 
   sameDay(time: Moment, time2: Moment): boolean {
-    return moment(time).month() == moment(time2).month()
-      && moment(time).year() == moment(time2).year()
-      && moment(time).date() == moment(time2).date()
+    var isSameDay = time.isSame(time2, "day")
+    return isSameDay
   }
 
   sameMonth(time: Moment, time2: Moment): boolean {
-    return moment(time).isSame(time2, "month")
+    var isSameMonth = time.isSame(time2, "month")
+    return isSameMonth
   }
 
   sameYear(time: Moment, time2: Moment): boolean {
-    return moment(time).year() == moment(time2).year()
+    var isSameYear = time.isSame(time2, "year")
+    return isSameYear
   }
 
 }
