@@ -15,11 +15,11 @@
 
 <ion-content padding>
 
-  <ion-list>
-    <ion-item-sliding *ngFor="let record of records">
+  <ion-list [virtualScroll]="records" [approxItemHeight]="'45px'">
+    <ion-item-sliding *virtualItem="let record">
       <ion-item>
         <ion-icon name="{{getNameForType(record.type)}}" item-left></ion-icon>
-        {{record.time | date:'hh:mm:ss'}}
+        {{record.time | date:'H:mm:ss'}}
       </ion-item>
       <ion-item-options side="right">
         <button ion-button color="danger" (click)="deleteRecord(record)">
