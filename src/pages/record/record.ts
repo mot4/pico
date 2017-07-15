@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, List } from 'ionic-angular';
+import { IonicPage, NavController, List } from 'ionic-angular';
 import { Record } from '../../app/services/record'
 import { RecordType } from "../../app/services/record-type";
 import { RecordProvider } from "../../providers/record/record";

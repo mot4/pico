@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from 'lodash';
 import { Record } from '../services/record'
-import * as moment from 'moment';
 
 @Pipe({
     name: 'unique',
