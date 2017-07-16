@@ -29,7 +29,14 @@ export class RecordPage {
   }
 
   ionViewWillEnter() {
+
+    this.loadRecords()
+
+  }
+
+  loadRecords() {
     this.recordProvider.loadRecordsForSelectedDay().then((v) => {
+      console.log('loaded in recordPage: ' + JSON.stringify(v))
       return this.records = v;
     }).then((records) => {
       if (records == undefined || records.length == 0) {
@@ -48,14 +55,17 @@ export class RecordPage {
   dateChanged(record: Record, date) {
     const { day, month, year, hour, minute, second } = date
     console.log(date)
-    var dateToSave = moment().date(day).month(month).year(year).hour(hour).minute(minute).second(second)
+    var dateToSave = moment().utc().date(day).month(month - 1).year(year).hour(hour).minute(minute).second(second)
+    console.log('changed date to save -> ' + dateToSave.format())
 
-    this.records[this.records.indexOf(record)].time = dateToSave //fixme what wenn moved to another date?
+    // this.records[this.records.indexOf(record)].time = dateToSave //FIXME what wenn moved to another date?
     // console.log(test.toISOString())
     // this.recordProvider.updateRecord(record, t, this.records)
-    this.recordProvider.updateRecord(record, date)
+    this.recordProvider.updateRecord(record, dateToSave)
 
     this.slidingItems.closeSlidingItems()
+
+    this.loadRecords()
   }
 
   getNameForType(type: RecordType): string {

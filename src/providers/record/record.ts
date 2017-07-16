@@ -109,7 +109,7 @@ export class RecordProvider {
 
     for (var month = 1; month <= 5; month++) {
       for (var day = 1; day <= 29; day++) {
-        var t = moment().year(2017).month(month).date(day).hour(month).minute(month).second(day)
+        var t = moment().utc().year(2017).month(month).date(day).hour(month).minute(month).second(day)
         records.push(new Record(RecordType.ENTRY, t))
         records.push(new Record(RecordType.DEPARTURE, t.month(t.month() + 5)))
       }
