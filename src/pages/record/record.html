@@ -19,7 +19,7 @@
     <ion-item-sliding *virtualItem="let record">
       <ion-item>
         <ion-icon name="{{getNameForType(record.type)}}" item-left></ion-icon>
-        {{record.time | date:'H:mm:ss'}}
+        {{record.time | amDateFormat:'HH:mm:ss'}}
       </ion-item>
       <ion-item-options side="right">
         <button ion-button color="danger" (click)="deleteRecord(record)">
